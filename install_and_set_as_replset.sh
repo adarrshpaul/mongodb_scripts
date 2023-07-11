@@ -55,3 +55,4 @@ modify_mongodb_config "$1" "$2" "$3"
 
 # Start MongoDB instance
 start_mongodb
+#How to use this script ./install_mongodb.sh 27017 /data/db /var/log/mongodb.log
