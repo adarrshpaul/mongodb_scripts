@@ -30,7 +30,18 @@ modify_mongodb_config() {
   config_file="/etc/mongod.conf"
 
   # Modify the configuration file
-  sudo sed -i 's/#replication:/replication:\n  replSetName: myReplSet/' $config_file
+  sudo sed -i "s/#replication:/replication:\n  replSetName: myReplSet\n/" $config_file
+
+  # Add the port, data directory, and log file path
+  sudo sed -i "s/#  port: 27017/  port: $1/" $config_file
+  sudo sed -i "s#  dbPath: /var/lib/mongodb#  dbPath: $2#" $config_file
+  sudo sed -i "s#  logPath: /var/log/mongodb/mongod.log#  logPath: $3#" $config_file
+}
+
+# Function to start MongoDB instance
+start_mongodb() {
+  # Start MongoDB service
+  sudo systemctl start mongod
 }
 
 # Install necessary packages
@@ -40,4 +51,7 @@ install_packages
 install_mongodb
 
 # Modify MongoDB configuration
-modify_mongodb_config
+modify_mongodb_config "$1" "$2" "$3"
+
+# Start MongoDB instance
+start_mongodb
